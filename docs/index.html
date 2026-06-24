@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心公益平台 - 让世界充满爱</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- AOS 动画库 -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .btn-primary {
+                @apply bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+            }
+            .btn-secondary {
+                @apply bg-secondary text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+            }
+            .btn-accent {
+                @apply bg-accent text-white px-6 py-2 rounded-lg hover:bg-amber-600 transition-colors duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fa fa-heart text-primary text-3xl"></i>
+                    <span class="text-2xl font-bold text-dark">爱心公益</span>
+                </div>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-dark hover:text-primary font-medium transition-colors" id="nav-home">首页</a>
+                    <a href="#projects" class="text-dark hover:text-primary font-medium transition-colors" id="nav-projects">公益项目</a>
+                    <a href="#volunteer" class="text-dark hover:text-primary font-medium transition-colors" id="nav-volunteer">志愿者活动</a>
+                    <a href="#news" class="text-dark hover:text-primary font-medium transition-colors" id="nav-news">公益资讯</a>
+                    <a href="#organizations" class="text-dark hover:text-primary font-medium transition-colors" id="nav-orgs">公益组织</a>
+                </div>
+                
+                <!-- 用户操作 -->
+                <div class="flex items-center space-x-4">
+                    <button id="login-btn" class="hidden md:block px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors">登录</button>
+                    <button id="register-btn" class="hidden md:block btn-primary">注册</button>
+                    <div id="user-menu" class="hidden items-center space-x-2">
+                        <img id="user-avatar" src="https://via.placeholder.com/40" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                        <span id="user-name" class="text-dark font-medium">用户名</span>
+                        <div class="relative group">
+                            <button class="text-dark hover:text-primary">
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
+                                <a href="#profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人中心</a>
+                                <a href="#donations" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">我的捐赠</a>
+                                <a href="#volunteer-history" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">志愿活动</a>
+                                <hr class="my-1">
+                                <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobile-menu-btn" class="md:hidden text-dark text-2xl">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden pt-4 pb-2">
+                <a href="#" class="block py-2 text-dark hover:text-primary" id="mobile-nav-home">首页</a>
+                <a href="#projects" class="block py-2 text-dark hover:text-primary" id="mobile-nav-projects">公益项目</a>
+                <a href="#volunteer" class="block py-2 text-dark hover:text-primary" id="mobile-nav-volunteer">志愿者活动</a>
+                <a href="#news" class="block py-2 text-dark hover:text-primary" id="mobile-nav-news">公益资讯</a>
+                <a href="#organizations" class="block py-2 text-dark hover:text-primary" id="mobile-nav-orgs">公益组织</a>
+                <div class="pt-2 flex space-x-4">
+                    <button id="mobile-login-btn" class="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors flex-1">登录</button>
+                    <button id="mobile-register-btn" class="btn-primary flex-1">注册</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-6" data-aos="zoom-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-dark">用户登录</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-gray-700 mb-2">邮箱/手机号</label>
+                    <input type="text" id="login-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入邮箱或手机号">
+                </div>
+                <div>
+                    <label for="login-password" class="block text-gray-700 mb-2">密码</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入密码">
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" class="mr-2">
+                        <label for="remember-me" class="text-gray-700">记住我</label>
+                    </div>
+                    <a href="#" class="text-primary hover:underline">忘记密码？</a>
+                </div>
+                <button type="submit" class="btn-primary w-full">登录</button>
+                <div class="text-center text-gray-700">
+                    还没有账号？<a href="#" id="switch-to-register" class="text-primary hover:underline">立即注册</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-6" data-aos="zoom-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-dark">用户注册</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label for="register-name" class="block text-gray-700 mb-2">用户名</label>
+                    <input type="text" id="register-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入用户名">
+                </div>
+                <div>
+                    <label for="register-email" class="block text-gray-700 mb-2">邮箱</label>
+                    <input type="email" id="register-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入邮箱">
+                </div>
+                <div>
+                    <label for="register-phone" class="block text-gray-700 mb-2">手机号</label>
+                    <input type="tel" id="register-phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入手机号">
+                </div>
+                <div>
+                    <label for="register-password" class="block text-gray-700 mb-2">密码</label>
+                    <input type="password" id="register-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入密码">
+                </div>
+                <div>
+                    <label for="register-confirm" class="block text-gray-700 mb-2">确认密码</label>
+                    <input type="password" id="register-confirm" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请再次输入密码">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="agree-terms" class="mr-2">
+                    <label for="agree-terms" class="text-gray-700">我已阅读并同意<a href="#" class="text-primary hover:underline">用户协议</a>和<a href="#" class="text-primary hover:underline">隐私政策</a></label>
+                </div>
+                <button type="submit" class="btn-primary w-full">注册</button>
+                <div class="text-center text-gray-700">
+                    已有账号？<a href="#" id="switch-to-login" class="text-primary hover:underline">立即登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 首页英雄区 -->
+    <section class="relative bg-gradient-to-r from-blue-500 to-blue-700 text-white py-20 md:py-32 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -right-20 -top-20 w-96 h-96 bg-white bg-opacity-10 rounded-full"></div>
+            <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-white bg-opacity-10 rounded-full"></div>
+            <div class="absolute right-1/4 bottom-1/4 w-40 h-40 bg-white bg-opacity-10 rounded-full animate-float"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl" data-aos="fade-right" data-aos-duration="1000">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-shadow">让爱心传递，<br>让世界更美好</h1>
+                <p class="text-xl md:text-2xl mb-8 text-blue-100">加入我们的公益平台，一起为需要帮助的人提供支持，<br>参与志愿服务，共创美好未来。</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#projects" class="btn-secondary text-center">
+                        <i class="fa fa-heart mr-2"></i>支持公益项目
+                    </a>
+                    <a href="#volunteer" class="btn-accent text-center">
+                        <i class="fa fa-users mr-2"></i>参与志愿活动
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 数据统计 -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-6 rounded-lg" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-4xl md:text-5xl font-bold text-primary mb-2" id="stats-projects">0</div>
+                    <p class="text-gray-600">公益项目</p>
+                </div>
+                <div class="p-6 rounded-lg" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-4xl md:text-5xl font-bold text-secondary mb-2" id="stats-donations">0</div>
+                    <p class="text-gray-600">累计捐赠</p>
+                </div>
+                <div class="p-6 rounded-lg" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-4xl md:text-5xl font-bold text-accent mb-2" id="stats-volunteers">0</div>
+                    <p class="text-gray-600">志愿者</p>
+                </div>
+                <div class="p-6 rounded-lg" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-4xl md:text-5xl font-bold text-blue-600 mb-2" id="stats-organizations">0</div>
+                    <p class="text-gray-600">公益组织</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公益项目 -->
+    <section id="projects" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4" data-aos="fade-up">公益项目</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">浏览我们的公益项目，选择您感兴趣的领域进行捐赠，每一份爱心都能带来改变。</p>
+            </div>
+            
+            <!-- 项目分类筛选 -->
+            <div class="flex flex-wrap justify-center gap-4 mb-10" data-aos="fade-up" data-aos-delay="200">
+                <button class="project-filter px-4 py-2 rounded-full bg-primary text-white" data-category="all">全部</button>
+                <button class="project-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="education">教育助学</button>
+                <button class="project-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="medical">医疗救助</button>
+                <button class="project-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="environment">环境保护</button>
+                <button class="project-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="poverty">扶贫帮困</button>
+                <button class="project-filter px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300" data-category="disaster">灾害救援</button>
+            </div>
+            
+            <!-- 项目搜索 -->
+            <div class="max-w-md mx-auto mb-10" data-aos="fade-up" data-aos-delay="300">
+                <div class="relative">
+                    <input type="text" id="project-search" class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="搜索公益项目...">
+                    <i class="fa fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <!-- 项目列表 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
+                <!-- 项目卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button id="load-more-projects" class="btn-primary">
+                    <i class="fa fa-refresh mr-2"></i>加载更多
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 志愿者活动 -->
+    <section id="volunteer" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4" data-aos="fade-up">志愿者活动</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">参与志愿者活动，用实际行动帮助他人，收获成长与快乐。</p>
+            </div>
+            
+            <!-- 活动列表 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="volunteer-container">
+                <!-- 活动卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button id="load-more-volunteer" class="btn-primary">
+                    <i class="fa fa-refresh mr-2"></i>加载更多
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公益资讯 -->
+    <section id="news" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4" data-aos="fade-up">公益资讯</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">了解最新的公益新闻、成功案例和行业动态。</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="news-container">
+                <!-- 资讯卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button id="load-more-news" class="btn-primary">
+                    <i class="fa fa-refresh mr-2"></i>加载更多
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公益组织 -->
+    <section id="organizations" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4" data-aos="fade-up">公益组织</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">了解参与我们平台的公益组织，探索更多合作机会。</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="organizations-container">
+                <!-- 组织卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button id="load-more-organizations" class="btn-primary">
+                    <i class="fa fa-refresh mr-2"></i>加载更多
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成为志愿者 -->
+    <section class="py-20 bg-gradient-to-r from-green-500 to-green-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">成为志愿者，传递爱心</h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">加入我们的志愿者队伍，用实际行动帮助他人，收获成长与快乐。</p>
+            <button id="become-volunteer-btn" class="btn-accent text-lg px-8 py-3" data-aos="fade-up" data-aos-delay="200">
+                <i class="fa fa-heart mr-2"></i>立即加入
+            </button>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i class="fa fa-heart text-primary text-3xl"></i>
+                        <span class="text-2xl font-bold">爱心公益</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">让爱心传递，让世界更美好。我们致力于连接有爱心的人与需要帮助的人，共同创造更美好的未来。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+                            <i class="fa fa-qq"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl transition-colors">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">快速链接</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#projects" class="text-gray-400 hover:text-white transition-colors">公益项目</a></li>
+                        <li><a href="#volunteer" class="text-gray-400 hover:text-white transition-colors">志愿者活动</a></li>
+                        <li><a href="#news" class="text-gray-400 hover:text-white transition-colors">公益资讯</a></li>
+                        <li><a href="#organizations" class="text-gray-400 hover:text-white transition-colors">公益组织</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">帮助中心</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">捐赠指南</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">志愿者申请</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">组织入驻</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">联系方式</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">北京市朝阳区建国路88号爱心大厦15层</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone text-primary mr-3"></i>
+                            <span class="text-gray-400">400-123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope text-primary mr-3"></i>
+                            <span class="text-gray-400">contact@aixiny公益.org</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-clock-o text-primary mr-3"></i>
+                            <span class="text-gray-400">周一至周五 9:00-18:00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="border-gray-800 mb-8">
+            
+            <div class="text-center text-gray-500 text-sm">
+                <p>&copy; 2025 爱心公益平台 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 项目详情模态框 -->
+    <div id="project-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6" data-aos="zoom-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-dark" id="modal-project-title"></h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="project-detail-content">
+                <!-- 项目详情内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 志愿者活动详情模态框 -->
+    <div id="volunteer-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6" data-aos="zoom-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-dark" id="modal-volunteer-title"></h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="volunteer-detail-content">
+                <!-- 活动详情内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 成为志愿者模态框 -->
+    <div id="volunteer-form-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg w-full max-w-md p-6" data-aos="zoom-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-dark">成为志愿者</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <form id="volunteer-form" class="space-y-4">
+                <div>
+                    <label for="volunteer-name" class="block text-gray-700 mb-2">姓名</label>
+                    <input type="text" id="volunteer-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入姓名">
+                </div>
+                <div>
+                    <label for="volunteer-phone" class="block text-gray-700 mb-2">手机号</label>
+                    <input type="tel" id="volunteer-phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入手机号">
+                </div>
+                <div>
+                    <label for="volunteer-email" class="block text-gray-700 mb-2">邮箱</label>
+                    <input type="email" id="volunteer-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入邮箱">
+                </div>
+                <div>
+                    <label for="volunteer-skills" class="block text-gray-700 mb-2">特长/技能</label>
+                    <input type="text" id="volunteer-skills" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入您的特长或技能">
+                </div>
+                <div>
+                    <label for="volunteer-interest" class="block text-gray-700 mb-2">感兴趣的领域</label>
+                    <select id="volunteer-interest" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">请选择</option>
+                        <option value="education">教育助学</option>
+                        <option value="medical">医疗救助</option>
+                        <option value="environment">环境保护</option>
+                        <option value="poverty">扶贫帮困</option>
+                        <option value="disaster">灾害救援</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="volunteer-message" class="block text-gray-700 mb-2">留言</label>
+                    <textarea id="volunteer-message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="请输入您的留言"></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full">提交申请</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 初始化AOS动画库
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // 初始化数据
+            initData();
+            
+            // 初始化事件监听
+            initEventListeners();
+            
+            // 初始化统计数字动画
+            animateStats();
+        });
+
+        // 模拟数据
+        let projects = [];
+        let volunteerActivities = [];
+        let news = [];
+        let organizations = [];
+        let currentUser = null;
+
+        // 初始化数据
+        function initData() {
+            // 公益项目数据
+            projects = [
+                {
+                    id: 1,
+                    title: "山区儿童阅读计划",
+                    category: "education",
+                    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "为山区儿童提供优质图书和阅读资源，建立乡村图书角，培养阅读习惯，开阔视野。",
+                    raised: 58000,
+                    goal: 100000,
+                    daysLeft: 30,
+                    organization: "阳光阅读基金会",
+                    updates: 5,
+                    donors: 1250
+                },
+                {
+                    id: 2,
+                    title: "重症儿童医疗救助",
+                    category: "medical",
+                    image: "https://images.unsplash.com/photo-1579154204601-01584b138819?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "为患有重症疾病的贫困家庭儿童提供医疗费用援助，帮助他们获得及时有效的治疗。",
+                    raised: 125000,
+                    goal: 200000,
+                    daysLeft: 45,
+                    organization: "儿童医疗救助基金",
+                    updates: 8,
+                    donors: 2800
+                },
+                {
+                    id: 3,
+                    title: "荒漠化地区植树造林",
+                    category: "environment",
+                    image: "https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "在荒漠化地区种植防风固沙林，改善生态环境，减少沙尘暴危害，保护生物多样性。",
+                    raised: 85000,
+                    goal: 150000,
+                    daysLeft: 60,
+                    organization: "绿色未来环保协会",
+                    updates: 12,
+                    donors: 1850
+                },
+                {
+                    id: 4,
+                    title: "农村贫困家庭危房改造",
+                    category: "poverty",
+                    image: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "为农村贫困家庭提供危房改造资金，改善居住条件，确保住房安全，提高生活质量。",
+                    raised: 156000,
+                    goal: 300000,
+                    daysLeft: 90,
+                    organization: "乡村振兴基金会",
+                    updates: 6,
+                    donors: 3200
+                },
+                {
+                    id: 5,
+                    title: "地震灾区重建家园",
+                    category: "disaster",
+                    image: "https://images.unsplash.com/photo-1560223125-27077c723756?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "为地震灾区提供重建资金和物资支持，帮助受灾群众重建家园，恢复正常生活。",
+                    raised: 250000,
+                    goal: 500000,
+                    daysLeft: 120,
+                    organization: "灾害救援协会",
+                    updates: 15,
+                    donors: 5600
+                },
+                {
+                    id: 6,
+                    title: "特殊儿童艺术教育",
+                    category: "education",
+                    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "为特殊儿童提供艺术教育课程，通过绘画、音乐等艺术形式帮助他们表达情感，促进身心健康发展。",
+                    raised: 45000,
+                    goal: 80000,
+                    daysLeft: 30,
+                    organization: "特殊教育发展中心",
+                    updates: 4,
+                    donors: 980
+                }
+            ];
+
+            // 志愿者活动数据
+            volunteerActivities = [
+                {
+                    id: 1,
+                    title: "社区助老服务",
+                    image: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "为社区独居老人提供生活照料、健康检查、陪伴聊天等服务，让老人感受社会温暖。",
+                    location: "北京市朝阳区",
+                    date: "2025-08-15",
+                    duration: "3小时",
+                    quota: 20,
+                    registered: 15,
+                    organizer: "阳光志愿者协会"
+                },
+                {
+                    id: 2,
+                    title: "图书馆图书整理",
+                    image: "https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "协助图书馆进行图书分类、整理、上架等工作，为读者创造良好的阅读环境。",
+                    location: "北京市海淀区",
+                    date: "2025-08-20",
+                    duration: "4小时",
+                    quota: 15,
+                    registered: 10,
+                    organizer: "文化志愿者联盟"
+                },
+                {
+                    id: 3,
+                    title: "公园环保清洁",
+                    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "在城市公园进行垃圾清理、分类宣传等环保活动，倡导绿色生活方式，保护生态环境。",
+                    location: "北京市西城区",
+                    date: "2025-08-25",
+                    duration: "2.5小时",
+                    quota: 30,
+                    registered: 25,
+                    organizer: "绿色行动志愿者协会"
+                },
+                {
+                    id: 4,
+                    title: "儿童医院陪伴",
+                    image: "https://images.unsplash.com/photo-1579154204601-01584b138819?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "在儿童医院陪伴住院儿童，进行游戏、讲故事等活动，减轻他们的病痛和孤独感。",
+                    location: "北京市东城区",
+                    date: "2025-08-30",
+                    duration: "3小时",
+                    quota: 12,
+                    registered: 8,
+                    organizer: "爱心陪伴志愿者团队"
+                },
+                {
+                    id: 5,
+                    title: "山区支教助教",
+                    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "到山区学校进行短期支教，教授课程，组织文体活动，丰富山区孩子的学习生活。",
+                    location: "河北省张家口市",
+                    date: "2025-09-10",
+                    duration: "7天",
+                    quota: 15,
+                    registered: 10,
+                    organizer: "山区教育支援协会"
+                },
+                {
+                    id: 6,
+                    title: "流浪动物救助",
+                    image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    description: "参与流浪动物收容所的清洁、喂食、遛狗等工作，帮助流浪动物找到温暖的家。",
+                    location: "北京市通州区",
+                    date: "2025-09-05",
+                    duration: "4小时",
+                    quota: 20,
+                    registered: 15,
+                    organizer: "动物保护志愿者协会"
+                }
+            ];
+
+            // 公益资讯数据
+            news = [
+                {
+                    id: 1,
+                    title: "2025年公益事业发展报告发布",
+                    image: "https://images.unsplash.com/photo-1560179304-6fc1d87258c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    summary: "报告显示，我国公益事业发展迅速，公众参与度不断提高，捐赠总额突破千亿大关。",
+                    date: "2025-07-20",
+                    source: "公益时报"
+                },
+                {
+                    id: 2,
+                    title: "山区教育扶贫项目取得显著成效",
+                    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    summary: "该项目已帮助1000多名山区学生获得更好的教育资源，升学率提高30%，得到社会广泛好评。",
+                    date: "2025-07-15",
+                    source: "教育报"
+                },
+                {
+                    id: 3,
+                    title: "全国志愿者人数突破2亿",
+                    image: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    summary: "我国志愿者队伍不断壮大，服务领域涵盖教育、医疗、环保等多个方面，成为社会建设的重要力量。",
+                    date: "2025-07-10",
+                    source: "中国青年报"
+                },
+                {
+                    id: 4,
+                    title: "环保公益项目获得国际大奖",
+                    image: "https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    summary: "我国一项荒漠化治理公益项目获得联合国环境规划署颁发的国际环境大奖，彰显中国环保力量。",
+                    date: "2025-07-05",
+                    source: "环境报"
+                },
+                {
+                    id: 5,
+                    title: "互联网公益平台发展研讨会召开",
+                    image: "https://images.unsplash.com/photo-1560179304-6fc1d87258c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    summary: "与会专家就互联网公益平台的发展现状、挑战与机遇进行深入探讨，提出多项创新发展建议。",
+                    date: "2025-07-01",
+                    source: "科技日报"
+                },
+                {
+                    id: 6,
+                    title: "企业公益捐赠总额创新高",
+                    image: "https://images.unsplash.com/photo-1560179304-6fc1d87258c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                    summary: "2024年我国企业公益捐赠总额达到500亿元，同比增长25%，体现了企业的社会责任担当。",
+                    date: "2025-06-25",
+                    source: "经济日报"
+                }
+            ];
+
+            // 公益组织数据
+            organizations = [
+                {
+                    id: 1,
+                    name: "阳光阅读基金会",
+                    logo: "https://via.placeholder.com/100?text=阳光阅读",
+                    category: "教育",
+                    description: "致力于推动阅读教育普及，为儿童提供优质阅读资源，培养阅读习惯。",
+                    projects: 15,
+                    members: 5000,
+                    rating: 4.8
+                },
+                {
+                    id: 2,
+                    name: "儿童医疗救助基金",
+                    logo: "https://via.placeholder.com/100?text=儿童医疗",
+                    category: "医疗",
+                    description: "为患有重症疾病的贫困家庭儿童提供医疗费用援助，帮助他们获得及时有效的治疗。",
+                    projects: 20,
+                    members: 8000,
+                    rating: 4.9
+                },
+                {
+                    id: 3,
+                    name: "绿色未来环保协会",
+                    logo: "https://via.placeholder.com/100?text=绿色未来",
+                    category: "环保",
+                    description: "致力于环境保护和生态建设，开展植树造林、垃圾分类、环保宣传等活动。",
+                    projects: 25,
+                    members: 12000,
+                    rating: 4.7
+                },
+                {
+                    id: 4,
+                    name: "乡村振兴基金会",
+                    logo: "https://via.placeholder.com/100?text=乡村振兴",
+                    category: "扶贫",
+                    description: "专注于农村发展和扶贫工作，通过产业扶持、教育支持等方式帮助农村地区发展。",
+                    projects: 18,
+                    members: 6000,
+                    rating: 4.6
+                },
+                {
+                    id: 5,
+                    name: "灾害救援协会",
+                    logo: "https://via.placeholder.com/100?text=灾害救援",
+                    category: "救援",
+                    description: "致力于自然灾害和突发事件的紧急救援和灾后重建工作，减少灾害损失。",
+                    projects: 12,
+                    members: 4000,
+                    rating: 4.9
+                },
+                {
+                    id: 6,
+                    name: "特殊教育发展中心",
+                    logo: "https://via.placeholder.com/100?text=特殊教育",
+                    category: "教育",
+                    description: "专注于特殊儿童的教育和发展，通过艺术教育、康复训练等方式帮助特殊儿童成长。",
+                    projects: 10,
+                    members: 3000,
+                    rating: 4.8
+                },
+                {
+                    id: 7,
+                    name: "阳光志愿者协会",
+                    logo: "https://via.placeholder.com/100?text=阳光志愿",
+                    category: "综合",
+                    description: "开展多种志愿服务活动，包括助老、助残、环保等多个领域，传递爱心和温暖。",
+                    projects: 30,
+                    members: 15000,
+                    rating: 4.7
+                },
+                {
+                    id: 8,
+                    name: "动物保护志愿者协会",
+                    logo: "https://via.placeholder.com/100?text=动物保护",
+                    category: "环保",
+                    description: "致力于动物保护和 welfare工作，开展流浪动物救助、动物权益宣传等活动。",
+                    projects: 15,
+                    members: 8000,
+                    rating: 4.8
+                }
+            ];
+
+            // 渲染数据
+            renderProjects();
+            renderVolunteerActivities();
+            renderNews();
+            renderOrganizations();
+        }
+
+        // 渲染公益项目
+        function renderProjects(filter = 'all', searchTerm = '') {
+            const container = document.getElementById('projects-container');
+            let filteredProjects = projects;
+            
+            // 应用分类筛选
+            if (filter !== 'all') {
+                filteredProjects = filteredProjects.filter(project => project.category === filter);
+            }
+            
+            // 应用搜索筛选
+            if (searchTerm) {
+                filteredProjects = filteredProjects.filter(project => 
+                    project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                    project.description.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 如果没有匹配的项目
+            if (filteredProjects.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa fa-search text-gray-400 text-5xl mb-4"></i>
+                        <p class="text-gray-500 text-lg">没有找到匹配的公益项目</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 渲染项目卡片
+            filteredProjects.forEach(project => {
+                const progressPercentage = Math.round((project.raised / project.goal) * 100);
+                
+                const projectCard = document.createElement('div');
+                projectCard.className = 'bg-white rounded-xl shadow-md overflow-hidden card-hover';
+                projectCard.setAttribute('data-aos', 'fade-up');
+                projectCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-48 object-cover">
+                        <span class="absolute top-4 right-4 bg-primary text-white text-xs px-2 py-1 rounded-full">${getCategoryName(project.category)}</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark mb-2">${project.title}</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">${project.description}</p>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-700">已筹资金</span>
+                                <span class="font-medium">¥${project.raised.toLocaleString()} / ¥${project.goal.toLocaleString()}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: ${progressPercentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600 mb-4">
+                            <span><i class="fa fa-calendar mr-1"></i>剩余 ${project.daysLeft} 天</span>
+                            <span><i class="fa fa-users mr-1"></i>${project.donors} 人已支持</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <img src="https://via.placeholder.com/30?text=${project.organization.substring(0, 2)}" alt="${project.organization}" class="w-6 h-6 rounded-full mr-2">
+                                <span class="text-sm text-gray-600">${project.organization}</span>
+                            </div>
+                            <button class="view-project-btn btn-primary py-1 px-4 text-sm" data-id="${project.id}">查看详情</button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(projectCard);
+            });
+            
+            // 添加查看项目详情事件监听
+            document.querySelectorAll('.view-project-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const projectId = parseInt(this.getAttribute('data-id'));
+                    showProjectDetail(projectId);
+                });
+            });
+        }
+
+        // 渲染志愿者活动
+        function renderVolunteerActivities() {
+            const container = document.getElementById('volunteer-container');
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 渲染活动卡片
+            volunteerActivities.forEach(activity => {
+                const remainingQuota = activity.quota - activity.registered;
+                
+                const activityCard = document.createElement('div');
+                activityCard.className = 'bg-white rounded-xl shadow-md overflow-hidden card-hover';
+                activityCard.setAttribute('data-aos', 'fade-up');
+                activityCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${activity.image}" alt="${activity.title}" class="w-full h-48 object-cover">
+                        <span class="absolute top-4 right-4 bg-secondary text-white text-xs px-2 py-1 rounded-full">志愿者活动</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark mb-2">${activity.title}</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">${activity.description}</p>
+                        <div class="flex items-center text-sm text-gray-600 mb-3">
+                            <i class="fa fa-map-marker mr-2 text-secondary"></i>
+                            <span>${activity.location}</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 mb-3">
+                            <i class="fa fa-calendar mr-2 text-secondary"></i>
+                            <span>${formatDate(activity.date)} · ${activity.duration}</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 mb-4">
+                            <i class="fa fa-users mr-2 text-secondary"></i>
+                            <span>已报名 ${activity.registered}/${activity.quota} 人</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <img src="https://via.placeholder.com/30?text=${activity.organizer.substring(0, 2)}" alt="${activity.organizer}" class="w-6 h-6 rounded-full mr-2">
+                                <span class="text-sm text-gray-600">${activity.organizer}</span>
+                            </div>
+                            <button class="view-volunteer-btn btn-secondary py-1 px-4 text-sm" data-id="${activity.id}">查看详情</button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(activityCard);
+            });
+            
+            // 添加查看活动详情事件监听
+            document.querySelectorAll('.view-volunteer-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const activityId = parseInt(this.getAttribute('data-id'));
+                    showVolunteerDetail(activityId);
+                });
+            });
+        }
+
+        // 渲染公益资讯
+        function renderNews() {
+            const container = document.getElementById('news-container');
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 渲染资讯卡片
+            news.forEach(item => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'bg-white rounded-xl shadow-md overflow-hidden card-hover';
+                newsCard.setAttribute('data-aos', 'fade-up');
+                newsCard.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center text-xs text-gray-500 mb-2">
+                            <span class="mr-3"><i class="fa fa-calendar mr-1"></i>${formatDate(item.date)}</span>
+                            <span><i class="fa fa-newspaper-o mr-1"></i>${item.source}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-dark mb-3">${item.title}</h3>
+                        <p class="text-gray-600 mb-4">${item.summary}</p>
+                        <a href="#" class="text-primary hover:underline flex items-center">
+                            阅读更多 <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                `;
+                
+                container.appendChild(newsCard);
+            });
+        }
+
+        // 渲染公益组织
+        function renderOrganizations() {
+            const container = document.getElementById('organizations-container');
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 渲染组织卡片
+            organizations.forEach(organization => {
+                const organizationCard = document.createElement('div');
+                organizationCard.className = 'bg-white rounded-xl shadow-md overflow-hidden card-hover';
+                organizationCard.setAttribute('data-aos', 'fade-up');
+                organizationCard.innerHTML = `
+                    <div class="p-6 flex flex-col items-center text-center">
+                        <img src="${organization.logo}" alt="${organization.name}" class="w-20 h-20 object-contain mb-4">
+                        <h3 class="text-lg font-bold text-dark mb-2">${organization.name}</h3>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full mb-3">${organization.category}</span>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${organization.description}</p>
+                        <div class="flex justify-between w-full text-sm text-gray-600 mb-4">
+                            <span><i class="fa fa-list-alt mr-1"></i>${organization.projects} 项目</span>
+                            <span><i class="fa fa-users mr-1"></i>${organization.members.toLocaleString()} 成员</span>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 flex">
+                                ${renderStarRating(organization.rating)}
+                            </div>
+                            <span class="text-gray-600 ml-1">${organization.rating}</span>
+                        </div>
+                        <a href="#" class="text-primary hover:underline text-sm">查看详情</a>
+                    </div>
+                `;
+                
+                container.appendChild(organizationCard);
+            });
+        }
+
+        // 初始化事件监听
+        function initEventListeners() {
+            // 移动端菜单切换
+            document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 登录按钮点击事件
+            document.getElementById('login-btn').addEventListener('click', function() {
+                document.getElementById('login-modal').classList.remove('hidden');
+            });
+            
+            document.getElementById('mobile-login-btn').addEventListener('click', function() {
+                document.getElementById('login-modal').classList.remove('hidden');
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+            
+            // 注册按钮点击事件
+            document.getElementById('register-btn').addEventListener('click', function() {
+                document.getElementById('register-modal').classList.remove('hidden');
+            });
+            
+            document.getElementById('mobile-register-btn').addEventListener('click', function() {
+                document.getElementById('register-modal').classList.remove('hidden');
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+            
+            // 关闭模态框按钮点击事件
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('login-modal').classList.add('hidden');
+                    document.getElementById('register-modal').classList.add('hidden');
+                    document.getElementById('project-detail-modal').classList.add('hidden');
+                    document.getElementById('volunteer-detail-modal').classList.add('hidden');
+                    document.getElementById('volunteer-form-modal').classList.add('hidden');
+                });
+            });
+            
+            // 切换到注册表单
+            document.getElementById('switch-to-register').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('register-modal').classList.remove('hidden');
+            });
+            
+            // 切换到登录表单
+            document.getElementById('switch-to-login').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('register-modal').classList.add('hidden');
+                document.getElementById('login-modal').classList.remove('hidden');
+            });
+            
+            // 登录表单提交
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                // 模拟登录验证
+                if (email && password) {
+                    // 模拟登录成功
+                    currentUser = {
+                        name: email.split('@')[0],
+                        email: email,
+                        avatar: `https://via.placeholder.com/40?text=${email.substring(0, 2)}`
+                    };
+                    
+                    // 更新UI
+                    updateUserUI();
+                    
+                    // 关闭模态框
+                    document.getElementById('login-modal').classList.add('hidden');
+                    
+                    // 显示登录成功提示
+                    showToast('登录成功！');
+                } else {
+                    showToast('请输入邮箱和密码', 'error');
+                }
+            });
+            
+            // 注册表单提交
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const phone = document.getElementById('register-phone').value;
+                const password = document.getElementById('register-password').value;
+                const confirm = document.getElementById('register-confirm').value;
+                const agreeTerms = document.getElementById('agree-terms').checked;
+                
+                // 简单验证
+                if (!name || !email || !phone || !password || !confirm) {
+                    showToast('请填写所有必填字段', 'error');
+                    return;
+                }
+                
+                if (password !== confirm) {
+                    showToast('两次输入的密码不一致', 'error');
+                    return;
+                }
+                
+                if (!agreeTerms) {
+                    showToast('请阅读并同意用户协议和隐私政策', 'error');
+                    return;
+                }
+                
+                // 模拟注册成功
+                currentUser = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    avatar: `https://via.placeholder.com/40?text=${name.substring(0, 2)}`
+                };
+                
+                // 更新UI
+                updateUserUI();
+                
+                // 关闭模态框
+                document.getElementById('register-modal').classList.add('hidden');
+                
+                // 显示注册成功提示
+                showToast('注册成功！');
+            });
+            
+            // 退出登录
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                currentUser = null;
+                updateUserUI();
+                showToast('已退出登录');
+            });
+            
+            // 项目分类筛选
+            document.querySelectorAll('.project-filter').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 更新按钮样式
+                    document.querySelectorAll('.project-filter').forEach(b => {
+                        b.classList.remove('bg-primary', 'text-white');
+                        b.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    this.classList.add('bg-primary', 'text-white');
+                    
+                    // 筛选项目
+                    const category = this.getAttribute('data-category');
+                    const searchTerm = document.getElementById('project-search').value;
+                    renderProjects(category, searchTerm);
+                });
+            });
+            
+            // 项目搜索
+            document.getElementById('project-search').addEventListener('input', function() {
+                const searchTerm = this.value;
+                const activeFilter = document.querySelector('.project-filter.bg-primary').getAttribute('data-category');
+                renderProjects(activeFilter, searchTerm);
+            });
+            
+            // 成为志愿者按钮
+            document.getElementById('become-volunteer-btn').addEventListener('click', function() {
+                // 如果未登录，显示登录模态框
+                if (!currentUser) {
+                    document.getElementById('login-modal').classList.remove('hidden');
+                    showToast('请先登录');
+                    return;
+                }
+                
+                // 显示志愿者申请表单
+                document.getElementById('volunteer-form-modal').classList.remove('hidden');
+            });
+            
+            // 志愿者申请表单提交
+            document.getElementById('volunteer-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 获取表单数据
+                const name = document.getElementById('volunteer-name').value;
+                const phone = document.getElementById('volunteer-phone').value;
+                const email = document.getElementById('volunteer-email').value;
+                const skills = document.getElementById('volunteer-skills').value;
+                const interest = document.getElementById('volunteer-interest').value;
+                const message = document.getElementById('volunteer-message').value;
+                
+                // 简单验证
+                if (!name || !phone || !email) {
+                    showToast('请填写姓名、手机号和邮箱', 'error');
+                    return;
+                }
+                
+                // 模拟提交成功
+                document.getElementById('volunteer-form-modal').classList.add('hidden');
+                showToast('申请提交成功！我们会尽快与您联系。');
+                
+                // 重置表单
+                this.reset();
+            });
+            
+            // 导航链接点击事件
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    
+                    // 如果是锚点链接
+                    if (targetId !== '#' && document.querySelector(targetId)) {
+                        e.preventDefault();
+                        
+                        // 关闭移动端菜单
+                        document.getElementById('mobile-menu').classList.add('hidden');
+                        
+                        // 滚动到目标位置
+                        document.querySelector(targetId).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 加载更多按钮点击事件
+            document.getElementById('load-more-projects').addEventListener('click', function() {
+                showToast('已加载全部项目');
+            });
+            
+            document.getElementById('load-more-volunteer').addEventListener('click', function() {
+                showToast('已加载全部活动');
+            });
+            
+            document.getElementById('load-more-news').addEventListener('click', function() {
+                showToast('已加载全部资讯');
+            });
+            
+            document.getElementById('load-more-organizations').addEventListener('click', function() {
+                showToast('已加载全部组织');
+            });
+        }
+
+        // 显示项目详情
+        function showProjectDetail(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            
+            if (!project) return;
+            
+            // 设置标题
+            document.getElementById('modal-project-title').textContent = project.title;
+            
+            // 设置内容
+            const content = document.getElementById('project-detail-content');
+            const progressPercentage = Math.round((project.raised / project.goal) * 100);
+            
+            content.innerHTML = `
+                <div class="mb-6">
+                    <img src="${project.image}" alt="${project.title}" class="w-full h-64 object-cover rounded-lg mb-4">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-primary text-white text-xs px-2 py-1 rounded-full mr-2">${getCategoryName(project.category)}</span>
+                        <span class="text-gray-500 text-sm">发布于 ${formatDate('2025-07-01')}</span>
+                    </div>
+                    <p class="text-gray-700 mb-6">${project.description}</p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                        <div class="flex justify-between text-lg mb-2">
+                            <span class="font-medium">已筹资金</span>
+                            <span class="font-bold text-primary">¥${project.raised.toLocaleString()} / ¥${project.goal.toLocaleString()}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                            <div class="bg-primary h-3 rounded-full" style="width: ${progressPercentage}%"></div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span><i class="fa fa-calendar mr-1"></i>剩余 ${project.daysLeft} 天</span>
+                            <span><i class="fa fa-users mr-1"></i>${project.donors} 人已支持</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+                        <button class="btn-primary flex-1">
+                            <i class="fa fa-heart mr-2"></i>立即捐赠
+                        </button>
+                        <button class="btn-secondary flex-1">
+                            <i class="fa fa-share-alt mr-2"></i>分享项目
+                        </button>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-xl font-bold mb-4">项目详情</h4>
+                        <p class="text-gray-700 mb-4">
+                            ${project.description}我们希望通过这个项目，为更多需要帮助的人提供支持，改善他们的生活条件，创造更好的未来。
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            项目实施计划：
+                        </p>
+                        <ul class="list-disc pl-5 text-gray-700 mb-4">
+                            <li>第一阶段：筹集资金，目标100,000元</li>
+                            <li>第二阶段：采购物资，组织人员</li>
+                            <li>第三阶段：项目实施，定期更新进展</li>
+                            <li>第四阶段：项目总结，公布资金使用情况</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            我们承诺将透明公开地使用每一笔捐款，定期更新项目进展，接受社会监督。
+                        </p>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6 mt-6">
+                        <h4 class="text-xl font-bold mb-4">项目动态</h4>
+                        <div class="space-y-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-4">
+                                    <img src="https://via.placeholder.com/40?text=${project.organization.substring(0, 2)}" alt="${project.organization}" class="w-10 h-10 rounded-full">
+                                </div>
+                                <div>
+                                    <div class="flex items-center mb-1">
+                                        <span class="font-medium text-dark">${project.organization}</span>
+                                        <span class="text-gray-500 text-sm ml-2">2025-07-15</span>
+                                    </div>
+                                    <p class="text-gray-700">项目资金已筹集58%，感谢各位爱心人士的支持！我们将继续努力，为更多需要帮助的人提供支持。</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-4">
+                                    <img src="https://via.placeholder.com/40?text=${project.organization.substring(0, 2)}" alt="${project.organization}" class="w-10 h-10 rounded-full">
+                                </div>
+                                <div>
+                                    <div class="flex items-center mb-1">
+                                        <span class="font-medium text-dark">${project.organization}</span>
+                                        <span class="text-gray-500 text-sm ml-2">2025-07-10</span>
+                                    </div>
+                                    <p class="text-gray-700">项目第一阶段已完成，我们已采购了部分物资，即将开始第二阶段的工作。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 显示模态框
+            document.getElementById('project-detail-modal').classList.remove('hidden');
+        }
+
+        // 显示志愿者活动详情
+        function showVolunteerDetail(activityId) {
+            const activity = volunteerActivities.find(a => a.id === activityId);
+            
+            if (!activity) return;
+            
+            // 设置标题
+            document.getElementById('modal-volunteer-title').textContent = activity.title;
+            
+            // 设置内容
+            const content = document.getElementById('volunteer-detail-content');
+            const remainingQuota = activity.quota - activity.registered;
+            
+            content.innerHTML = `
+                <div class="mb-6">
+                    <img src="${activity.image}" alt="${activity.title}" class="w-full h-64 object-cover rounded-lg mb-4">
+                    <div class="flex items-center mb-4">
+                        <span class="bg-secondary text-white text-xs px-2 py-1 rounded-full mr-2">志愿者活动</span>
+                        <span class="text-gray-500 text-sm">发布于 ${formatDate('2025-07-01')}</span>
+                    </div>
+                    <p class="text-gray-700 mb-6">${activity.description}</p>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="text-gray-600 text-sm mb-1">活动时间</h5>
+                                <p class="font-medium">${formatDate(activity.date)} · ${activity.duration}</p>
+                            </div>
+                            <div>
+                                <h5 class="text-gray-600 text-sm mb-1">活动地点</h5>
+                                <p class="font-medium">${activity.location}</p>
+                            </div>
+                            <div>
+                                <h5 class="text-gray-600 text-sm mb-1">招募人数</h5>
+                                <p class="font-medium">${activity.registered}/${activity.quota} 人</p>
+                            </div>
+                            <div>
+                                <h5 class="text-gray-600 text-sm mb-1">组织方</h5>
+                                <p class="font-medium">${activity.organizer}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center mb-8">
+                        <button id="join-volunteer-btn" class="btn-secondary ${remainingQuota <= 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${remainingQuota <= 0 ? 'disabled' : ''}>
+                            <i class="fa fa-check-circle mr-2"></i>${remainingQuota > 0 ? '立即报名' : '名额已满'}
+                        </button>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-xl font-bold mb-4">活动详情</h4>
+                        <p class="text-gray-700 mb-4">
+                            ${activity.description}我们欢迎有爱心、有责任感的志愿者加入我们的队伍，一起为社会做出贡献。
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            活动内容：
+                        </p>
+                        <ul class="list-disc pl-5 text-gray-700 mb-4">
+                            <li>参与活动前期准备工作</li>
+                            <li>按照分工完成各自的任务</li>
+                            <li>活动结束后进行总结和分享</li>
+                        </ul>
+                        <p class="text-gray-700 mb-4">
+                            志愿者要求：
+                        </p>
+                        <ul class="list-disc pl-5 text-gray-700 mb-4">
+                            <li>年满18周岁，身体健康</li>
+                            <li>有爱心、有责任感，能够认真完成任务</li>
+                            <li>遵守组织纪律，服从安排</li>
+                            <li>有相关志愿服务经验者优先</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            活动福利：提供志愿者服务证明、活动纪念礼品、午餐和交通补贴。
+                        </p>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-6 mt-6">
+                        <h4 class="text-xl font-bold mb-4">联系方式</h4>
+                        <div class="flex items-center text-gray-700 mb-2">
+                            <i class="fa fa-phone mr-3 text-secondary"></i>
+                            <span>400-123-4567</span>
+                        </div>
+                        <div class="flex items-center text-gray-700">
+                            <i class="fa fa-envelope mr-3 text-secondary"></i>
+                            <span>volunteer@example.org</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 添加报名按钮点击事件
+            document.getElementById('join-volunteer-btn').addEventListener('click', function() {
+                // 如果未登录，显示登录模态框
+                if (!currentUser) {
+                    document.getElementById('volunteer-detail-modal').classList.add('hidden');
+                    document.getElementById('login-modal').classList.remove('hidden');
+                    showToast('请先登录');
+                    return;
+                }
+                
+                // 模拟报名成功
+                showToast('报名成功！我们会尽快与您联系。');
+                document.getElementById('volunteer-detail-modal').classList.add('hidden');
+            });
+            
+            // 显示模态框
+            document.getElementById('volunteer-detail-modal').classList.remove('hidden');
+        }
+
+        // 更新用户UI
+        function updateUserUI() {
+            const loginBtn = document.getElementById('login-btn');
+            const registerBtn = document.getElementById('register-btn');
+            const mobileLoginBtn = document.getElementById('mobile-login-btn');
+            const mobileRegisterBtn = document.getElementById('mobile-register-btn');
+            const userMenu = document.getElementById('user-menu');
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            
+            if (currentUser) {
+                // 显示用户菜单
+                userMenu.classList.remove('hidden');
+                userMenu.classList.add('flex');
+                
+                // 隐藏登录/注册按钮
+                loginBtn.classList.add('hidden');
+                registerBtn.classList.add('hidden');
+                mobileLoginBtn.classList.add('hidden');
+                mobileRegisterBtn.classList.add('hidden');
+                
+                // 设置用户信息
+                userAvatar.src = currentUser.avatar;
+                userName.textContent = currentUser.name;
+            } else {
+                // 隐藏用户菜单
+                userMenu.classList.add('hidden');
+                userMenu.classList.remove('flex');
+                
+                // 显示登录/注册按钮
+                loginBtn.classList.remove('hidden');
+                registerBtn.classList.remove('hidden');
+                mobileLoginBtn.classList.remove('hidden');
+                mobileRegisterBtn.classList.remove('hidden');
+            }
+        }
+
+        // 显示提示消息
+        function showToast(message, type = 'success') {
+            // 创建提示元素
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+            toast.textContent = message;
+            
+            // 添加到页面
+            document.body.appendChild(toast);
+            
+            // 显示提示
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+                toast.classList.add('translate-x-0');
+            }, 100);
+            
+            // 自动隐藏
+            setTimeout(() => {
+                toast.classList.remove('translate-x-0');
+                toast.classList.add('translate-x-full');
+                
+                // 移除元素
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // 统计数字动画
+        function animateStats() {
+            const statsProjects = document.getElementById('stats-projects');
+            const statsDonations = document.getElementById('stats-donations');
+            const statsVolunteers = document.getElementById('stats-volunteers');
+            const statsOrganizations = document.getElementById('stats-organizations');
+            
+            const targetProjects = 125;
+            const targetDonations = 1250000;
+            const targetVolunteers = 25000;
+            const targetOrganizations = 58;
+            
+            let currentProjects = 0;
+            let currentDonations = 0;
+            let currentVolunteers = 0;
+            let currentOrganizations = 0;
+            
+            const duration = 2000; // 动画持续时间（毫秒）
+            const frameRate = 60; // 每秒帧数
+            const totalFrames = duration / (1000 / frameRate);
+            
+            let frame = 0;
+            
+            const animate = () => {
+                if (frame < totalFrames) {
+                    frame++;
+                    
+                    // 计算当前值（使用缓动函数）
+                    const progress = easeOutQuad(frame / totalFrames);
+                    
+                    currentProjects = Math.round(targetProjects * progress);
+                    currentDonations = Math.round(targetDonations * progress);
+                    currentVolunteers = Math.round(targetVolunteers * progress);
+                    currentOrganizations = Math.round(targetOrganizations * progress);
+                    
+                    // 更新显示
+                    statsProjects.textContent = currentProjects;
+                    statsDonations.textContent = currentDonations.toLocaleString();
+                    statsVolunteers.textContent = currentVolunteers.toLocaleString();
+                    statsOrganizations.textContent = currentOrganizations;
+                    
+                    // 继续动画
+                    requestAnimationFrame(animate);
+                }
+            };
+            
+            // 开始动画
+            animate();
+        }
+
+        // 缓动函数
+        function easeOutQuad(t) {
+            return t * (2 - t);
+        }
+
+        // 辅助函数：格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        }
+
+        // 辅助函数：获取分类名称
+        function getCategoryName(category) {
+            const categories = {
+                'education': '教育助学',
+                'medical': '医疗救助',
+                'environment': '环境保护',
+                'poverty': '扶贫帮困',
+                'disaster': '灾害救援'
+            };
+            
+            return categories[category] || category;
+        }
+
+        // 辅助函数：渲染星级评分
+        function renderStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            let stars = '';
+            
+            // 全星
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fa fa-star"></i>';
+            }
+            
+            // 半星
+            if (halfStar) {
+                stars += '<i class="fa fa-star-half-o"></i>';
+            }
+            
+            // 空星
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="fa fa-star-o"></i>';
+            }
+            
+            return stars;
+        }
+    </script>
+</body>
+</html>
