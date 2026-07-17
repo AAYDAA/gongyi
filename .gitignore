@@ -1,1 +1,24 @@
+# IDEs
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Java
+target/
+*.class
+*.jar
+*.war
+
+# Node
+node_modules/
+dist/
+
+# Env (contains secrets)
+.env.local
+.env.production
+
+# Docs
 /docs/

@@ -9,7 +9,7 @@ export interface ApiResult<T> {
 }
 
 export const request: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: '/api',
   timeout: 10000,
   withCredentials: true,
 })
@@ -44,4 +44,3 @@ request.interceptors.response.use(
     return Promise.reject(error)
   },
 )
-
