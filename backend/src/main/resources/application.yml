@@ -2,10 +2,12 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: optional:classpath:application-local.yml
   datasource:
     url: jdbc:mysql://localhost:3306/gongyi_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 123456
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
@@ -21,10 +23,10 @@ pagehelper:
 
 app:
   jwt:
-    secret: "change-me-to-a-long-random-secret"
+    secret: ${JWT_SECRET:please-set-JWT_SECRET-environment-variable}
     expire-seconds: 86400
   init-admin:
     enabled: true
     username: admin
-    password: admin123456
+    password: ${ADMIN_PASSWORD:admin123456}
     email: admin@example.com

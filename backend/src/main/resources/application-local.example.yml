@@ -1,0 +1,23 @@
+﻿# ============================================================
+# 本地开发配置示例
+# 复制此文件为 application-local.yml（已被 .gitignore 忽略）
+# 填入你的真实密码，Spring Boot 会自动加载覆盖默认值
+# ============================================================
+#
+# 用法：
+#   1. 复制本文件为 backend/src/main/resources/application-local.yml
+#   2. 修改下面各项的值
+#   3. 正常启动即可，无需额外参数
+#   4. Spring Boot 自动读取 application-local.yml，优先级高于 application.yml
+#
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+
+app:
+  jwt:
+    secret: please-set-JWT_SECRET-environment-variable
+  init-admin:
+    password: admin123456

@@ -1,4 +1,5 @@
 ﻿services:
+
   mysql:
     image: mysql:8.0
     environment:
@@ -21,9 +22,9 @@
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gongyi_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
-      APP_JWT_SECRET: ${JWT_SECRET:-please-change-this-to-a-random-secret-in-production}
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      JWT_SECRET: ${JWT_SECRET:-please-set-JWT_SECRET-environment-variable}
       APP_INIT_ADMIN_ENABLED: "true"
     depends_on:
       mysql:

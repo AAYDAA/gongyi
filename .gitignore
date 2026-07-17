@@ -19,6 +19,7 @@ dist/
 # Env (contains secrets)
 .env.local
 .env.production
+application-local.yml
 
 # Docs
 /docs/
